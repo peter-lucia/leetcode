@@ -1,11 +1,12 @@
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
-        # use hash table (dictionary) to get linear time complexity
-        tried = {}
+        hash_table = {}
         for idx, num in enumerate(nums):
-            neededNum = target - num
-            if neededNum in tried:
-                return [tried[neededNum], idx]
-            tried[num] = idx
+            needed_num = target - num
+            if needed_num in hash_table:
+                return [idx, hash_table[needed_num]]
+            else:
+                hash_table[num] = idx
         return []
+        
