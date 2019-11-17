@@ -1,47 +1,34 @@
-class Solution(object):
-    
-    def isHeightFoundLater(self, start_idx, height, arr):
-        if start_idx+1 < len(arr):
-            for i in range(start_idx+1, len(arr)):
-                if arr[i] >= height:
-                    return True
-        return False
-    
-    def getMaxHeightFoundLater(self, start_idx, arr):
-        if start_idx+1 not in range(0, len(arr)):
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if height == []:
             return 0
+        left = 0
+        right = len(height) - 1
         
-        return max(arr[start_idx+1:])
+        total = 0
+        left_max = 0
+        right_max = 0
+        while left != right:
+            # check if left block is less than right block
+            if height[left] < height[right]:
+                
+                if height[left] >= left_max:
+                    left_max = height[left]
+                else:
+                    # if left block 
+                    total += left_max - height[left]
+                
+                left += 1
 
-    def getFirstStepUp(self, height):
-        min_height = min(height)
-        idx_min_height = height.index(min_height)
-        for idx, each in enumerate(height):
-            if each > min_height and idx > idx_min_height:
-                return each, idx
-        return min_height, idx_min_height
-                    
-    
-    def trap(self, height):
-        """
-        :type height: List[int]
-        :rtype: int
-        """
-        areas = 0
-        max_l = max_r = 0
-        l = 0
-        r = len(height)-1
-        while l < r:
-            if height[l] < height[r]:
-                if height[l] > max_l:
-                    max_l = height[l]
-                else:
-                    areas += max_l - height[l]
-                l +=1
             else:
-                if height[r] > max_r:
-                    max_r = height[r]
+                if height[right] >= right_max:
+                    right_max = height[right]
                 else:
-                    areas += max_r - height[r]
-                r -=1
-        return areas
+                
+                    total += right_max - height[right]
+                right -= 1
+        return total
+            
+            
+            
+            
