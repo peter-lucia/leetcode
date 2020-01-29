@@ -1,19 +1,13 @@
+import math
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        max_gain = 0
-        if len(prices) <= 1:
-            return max_gain
-        min_price = prices[0]
-        for i in range(1, len(prices)):
-            gain = prices[i] - min_price
+        min_price = math.inf
+        max_profit = 0
+        
+        for i in range(len(prices)):
             if prices[i] < min_price:
                 min_price = prices[i]
-            elif gain > max_gain:
-                max_gain = gain
-        return max_gain
+            elif prices[i] - min_price > max_profit:
+                max_profit = prices[i] - min_price
+        return max_profit
         
-            
-            
-            
-                
-            
