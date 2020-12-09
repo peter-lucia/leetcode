@@ -1,13 +1,19 @@
-import math
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        min_price = math.inf
-        max_profit = 0
+    
+    def getMaxProfit(self, prices: List[int]) -> (int, int, int):
+        if len(prices) == 1:
+            return 0, prices[0], prices[0]
+        n = len(prices)
         
-        for i in range(len(prices)):
-            if prices[i] < min_price:
-                min_price = prices[i]
-            elif prices[i] - min_price > max_profit:
-                max_profit = prices[i] - min_price
-        return max_profit
+        pA, minA, maxA = self.getMaxProfit(prices[:n//2])
+        pB, minB, maxB = self.getMaxProfit(prices[(n//2):])
+        
+        return max(pA, pB, maxB - minA), min(minA, minB), max(maxA, maxB)
+    
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) == 0:
+            return 0
+        return self.getMaxProfit(prices)[0]
+
+        
         
