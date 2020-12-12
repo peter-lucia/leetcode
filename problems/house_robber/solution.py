@@ -1,16 +1,22 @@
-class Solution:  
-    def rob(self, nums: List[int]) -> int:
-        # base cases
+class Solution:
+    def rob(self, p: List[int]) -> int:
+        n = len(p)
+
+        if n == 0:
+            return 0
+
+        T = [0 for _ in range(n)]
         
-        prev_max = 0
-        curr_max = 0
+        T[0] = p[0]
         
-        for num in nums:
-            temp = curr_max
-            curr_max = max(prev_max + num, curr_max)
-            prev_max = temp
-        return curr_max
-        
-        
-        
+        if n > 1:
+            T[1] = max(T[0], p[1])
+        else:
+            return T[0]
+
+        for i in range(2, n):
+            T[i] = max(p[i], T[i-1], T[i-2] + p[i])
+
+        return T[n-1]
+
         
