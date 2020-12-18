@@ -3,9 +3,10 @@ class Solution:
         lookup = {}
         
         for idx, num in enumerate(nums):
-            needed_num = target - num
-            if needed_num in lookup:
-                return [lookup[needed_num], idx]
+            if target-num in lookup:
+                return idx, lookup[target-num]
+            
             lookup[num] = idx
-        return [-1, -1]
+
+
         
