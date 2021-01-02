@@ -1,20 +1,18 @@
 class Solution:
     def reverse(self, x: int) -> int:
-        # detect if x is negative
-        # convert digits of x excluding negative sign to a string
-        # reverse those elements of the string
-        # cast back to an integer
+        negative = x < 0
         
-        neg = x < 0
-        digits = str(abs(x))
-        result = ""
-        for digit in digits:
-            result = digit + result
-        result = int(result)
-        if neg:
-            result *= -1
-        if -2**31 <= result <= 2**31-1:
-            return result
-        return 0
+        x = str(abs(x))
+        result = 0
+        for i in range(len(x)):
+            result += int(x[i])*10**(i)
+            
+        if result < -2**31 or result > 2**31 - 1:
+            return 0
+        if negative:
+            return -result
+        return result
+        
+        
         
             
