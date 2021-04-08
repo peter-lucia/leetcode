@@ -1,28 +1,31 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        # we can assume n > 2
+        # nums = 1,2,3,4
+        # A = 1, 2, 6, 
+        
         n = len(nums)
-        
-        products_left = []
-        running_product = 1
+        # A = the array containing the cumulative product up to each i starting from the left side and moving right
+        A = []
+        prod = 1
+        for each in nums:
+            prod *= each
+            A.append(prod)
+        # B = array containing the product up to each j starting from the right side and moving left
+        B = []
+        prod = 1
+        for each in reversed(nums):
+            prod *= each
+            B.append(prod)
+        B.reverse()
+        # iterate over the array and multiply i-1 * i+1
+        result = []
         for i in range(n):
-            running_product *= nums[i]
-            products_left.append(running_product)
-        
-        products_right = []
-        running_product = 1
-        for i in range(n-1, -1, -1):
-            running_product *= nums[i]
-            products_right.append(running_product)
-        
-        products_right.reverse()
-        
-        result = [0]*n
-        result[0] = products_right[1]
-        result[n-1] = products_left[n-2]
-        for i in range(1, n-1):
-            result[i] = products_right[i+1]*products_left[i-1]
-        
-        return result
-        
+            if i == 0:
+                result.append(B[1])
+            elif i == n-1:
+                result.append(A[n-2])
+            else:
+                result.append(A[i-1]*B[i+1])
+            
+        return result            
