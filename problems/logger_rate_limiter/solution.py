@@ -1,17 +1,16 @@
 class Logger:
 
-    def __init__(self):
-        self.message_map = {}
+	def __init__(self):
+		self.message_map = {}
 
-    def shouldPrintMessage(self, timestamp: int, message: str) -> bool:
-        if message not in self.message_map:
-            self.message_map[message] = timestamp
-            return True
-        if timestamp - self.message_map[message] < 10:
-            return False
-        
-        self.message_map[message] = timestamp
-        return True
+	def shouldPrintMessage(self, timestamp: int, message: str) -> bool:
+		if message not in self.message_map: # O(1) avg. O(n) worst case
+			self.message_map[message] = timestamp
+			return True
+		if timestamp - self.message_map[message] < 10:
+			return False
+		self.message_map[message] = timestamp
+		return True
 
 
 # Your Logger object will be instantiated and called as such:
