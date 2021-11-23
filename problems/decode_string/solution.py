@@ -38,7 +38,3 @@ class Solution:
                     stack.append(new_string)
         # pop each element off the top of the stack and add it to the beginning of the result
         return "".join(stack)
-
-
-        
-        
