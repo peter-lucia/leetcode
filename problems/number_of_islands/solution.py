@@ -1,38 +1,30 @@
-class Solution:        
+class Solution:           
     def numIslands(self, grid: List[List[str]]) -> int:
-        # initialize the number of islands found to 0
-        count = 0
-        # for each row in the grid, set i = the index, iv equal to the value
-        for i,iv in enumerate(grid):
-            # for each column in the current row, j = index of col, jv = value
-            for j,jv in enumerate(iv):
-                # if the current value of the column is 1, we have found a new island
-                if jv == "1":
-                    # perform dfs on this island's position, marking all spots on the island as -1
-                    # instead of 1 to show that the island is covered for future
-                    # iterations
-                    self.dfs(grid,i,j)
-                    # increase the count of the islands found
-                    count += 1
-
-        return count
-
-    def dfs(self,grid: [[str]], i: int, j:int):
-        # if i or j are outside the bounds of the grid
-        if i >= len(grid) or j >= len(grid[i]):
-            return
-        # if we have found water instead of an island, or a previously
-        # seen spot on an island, return
-        if i < 0 or j < 0 or grid[i][j] == "0" or grid[i][j] == "-1":
-            return
+        # DFS
+        if not grid:
+            return 0
         
-        # otherwise, mark this spot on the island as found
-        grid[i][j] = "-1"
-
-        # recursively explore all other adjacent positions (top, down, left, and right)
-        # and mark them as found.
-        self.dfs(grid, i+1, j)
-        self.dfs(grid, i-1,j)
-        self.dfs(grid, i, j+1)
-        self.dfs(grid, i, j-1)
+        n = len(grid)
+        m = len(grid[0])
         
+        def dfs(grid: List[List[str]], i, j, visited: List[List[int]]):
+
+            if i < 0 or j < 0 or i >= n or j >= m or grid[i][j] != '1' or visited[i][j]:
+                return
+
+            visited[i][j] = True 
+
+            dfs(grid, i+1, j, visited)
+            dfs(grid, i-1, j, visited)
+            dfs(grid, i, j-1, visited)
+            dfs(grid, i, j+1, visited)
+        
+        num_islands = 0
+        visited = [[False for _ in range(m)] for _ in range(n)]
+        for i in range(n):
+            for j in range(m):
+                if not visited[i][j] and grid[i][j] == '1':
+                    dfs(grid, i, j, visited)
+                    num_islands += 1
+        return num_islands
+
