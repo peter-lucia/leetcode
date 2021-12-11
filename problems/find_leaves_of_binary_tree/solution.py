@@ -6,6 +6,45 @@
 #         self.right = right
 class Solution:
     
+    def bottom_view_hashmap(self, root, lookup, level, path, parent, is_left, deleted_list):
+        
+        if root is None:
+            return
+        
+        if path in lookup:
+            if level >= lookup[path][1]:
+                lookup[path] = [root.val, level]
+        else:
+            lookup[path] = [root.val, level]
+            
+
+        
+        if root.left is None and root.right is None:
+            deleted_list.append(root.val)
+            if is_left:
+                parent.left = None
+                
+            else:
+                parent.right = None
+            del lookup[path]
+            return
+        
+        self.bottom_view_hashmap(root.left,
+                                lookup,
+                                level + 1,
+                                path + "-left",
+                                root,
+                                True,
+                                deleted_list)
+        self.bottom_view_hashmap(root.right,
+                                lookup,
+                                level + 1,
+                                path + "-right",
+                                root,
+                                False,
+                                deleted_list)
+
+        
     def findLeaves(self, root: TreeNode) -> List[List[int]]:
         """
             Example:
@@ -30,21 +69,13 @@ class Solution:
         }
         """
         lookup = collections.defaultdict(list)
-
-        def dfs(node: TreeNode, level: int):
-            """
-            Gets the maximum depth from the left and right subtrees
-            of a given node
-            """
-            if not node:
-                return level
-            max_left_level = dfs(node.left, level)
-            max_right_level = dfs(node.right, level)
-            level = max(max_left_level, max_right_level)
-            lookup[level].append(node.val)
-            return level + 1
-        dfs(root, 0)
-        # lookup.values() for defaultdict returns
-        # a list of lists for all values
-        return lookup.values()
+        result = []
+        while root:
+            deleted_list = []
+            self.bottom_view_hashmap(root, lookup, 0, "", root, False, deleted_list)
+            result.append(deleted_list)
+            if not lookup:
+                break
+        
+        return result
         
