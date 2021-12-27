@@ -1,12 +1,6 @@
-class Solution(object):
-    def findComplement(self, num):
-        """
-        :type num: int
-        :rtype: int
-        """
-        flip = {'1':'0','0':'1'}
-        test = ''
-        for each in str(bin(num)[2:]):
-            test += flip[each]
-        return int(test, 2)
-        
+class Solution:
+    def findComplement(self, num: int) -> int:
+        # minimum number of bits needed to represent num in binary
+        bit_length = num.bit_length()
+        mask = ((1 << bit_length) - 1)
+        return num ^ mask
