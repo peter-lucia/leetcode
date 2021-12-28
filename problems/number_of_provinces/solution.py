@@ -1,25 +1,31 @@
 class Solution:
-    def dfs(self, isConnected, i: int, visited):
-
-        n = len(isConnected)
-        m = len(isConnected[0])
-        
-        for j in range(m):
-            if isConnected[i][j] == 1 and visited[j] == 0:
-                visited[j] = 1
-                self.dfs(isConnected, j, visited)
-
-
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        n = len(isConnected)
-        m = len(isConnected[0])
-
-        visited = [0 for _ in range(n)]
-
+        
+        # Approach DFS
+        # Run DFS from each vertex if that vertex is not yet visited
+        
+        num_vertices = len(isConnected)
+        
+        def dfs(starting_vertex: int, adj_matrix: List[List[int]], visited: set):
+            
+            visited.add(starting_vertex)
+            
+            for i in range(len(adj_matrix)):
+                if i in visited:
+                    continue
+                if adj_matrix[starting_vertex][i] == 1:
+                    visited.add(i)
+                    dfs(i, adj_matrix, visited)
+            
+        
         cc = 0
-        for i in range(n):
-            if visited[i] == 0:
-                self.dfs(isConnected, i, visited)
+        visited = set([])
+        for i in range(num_vertices):
+            if i not in visited:
+                dfs(i, isConnected, visited)
                 cc += 1
         return cc
-
+        
+            
+            
+            
