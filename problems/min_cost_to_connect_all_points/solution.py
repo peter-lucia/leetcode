@@ -1,14 +1,18 @@
 class DisjointSet:
 
-    def __init__(self, size: int):
+    def __init__(self, points):
         # Initially the rank (height of tree) for each node is zero 
         # since all nodes are separated
-        self.rank = [0 for _ in range(size)]
+        self.rank = {}
         # Map the node (index) to its parent node. 
         # Initially all nodes are separated, so the parent is itself
-        self.parent = [i for i in range(size)]
+        self.parent = {}
+        for point in points:
+            x, y = point[0], point[1]
+            self.parent[(x, y)] = (x,y)
+            self.rank[(x,y)] = 0
 
-    def find(self, x: int) -> int:
+    def find(self, x: Tuple[int, int]) -> Tuple[int, int]:
         """
         Gets the root node of x
         """
@@ -16,7 +20,7 @@ class DisjointSet:
             x = self.find(self.parent[x])
         return x
 
-    def union(self, x: int, y: int):
+    def union(self, x: Tuple[int, int], y: Tuple[int, int]):
         """
         Merges sets that x and y reside in
         """
@@ -38,30 +42,30 @@ class Solution:
         
         # Build list of edges connecting all points
         edges = []
-        for i in range(len(points)):
-            for j in range(len(points)):
-                if i == j:
+        for point1 in points:
+            for point2 in points:
+                if point1 == point2:
                     continue
-                x1 = points[i][0]
-                y1 = points[i][1]
-                x2 = points[j][0]
-                y2 = points[j][1]
+                x1 = point1[0]
+                y1 = point1[1]
+                x2 = point2[0]
+                y2 = point2[1]
                 weight = abs(x2 - x1) + abs(y2 - y1)
                 # since all points are distinct, we use the points index in points as its unique identifier
                 # This is easier to work with in the disjoint set structure
-                edges.append((i, j, weight))
+                edges.append((tuple(point1), tuple(point2), weight))
                 
         # Kruskal's algorithm
         # Initially all points are disconnected
-        dj_set = DisjointSet(size = len(edges))
+        dj_set = DisjointSet(points)
         # sort edges in place by weight, increasing
         edges.sort(key=lambda val: val[2])
         edges_sum = 0
         num_edges = 0
-        for (i, j, weight) in edges:
-            if dj_set.find(i) != dj_set.find(j):
+        for (x, y, weight) in edges:
+            if dj_set.find(x) != dj_set.find(y):
                 edges_sum += weight
-                dj_set.union(i, j)
+                dj_set.union(x, y)
                 num_edges += 1
             if num_edges == len(points) - 1:
                 # We've built the MST already
