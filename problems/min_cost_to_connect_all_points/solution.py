@@ -10,7 +10,7 @@ class DisjointSet:
 
     def find(self, x: int) -> int:
         """
-        Gets the root of x
+        Gets the root node of x
         """
         if x != self.parent[x]:
             x = self.find(self.parent[x])
@@ -18,7 +18,7 @@ class DisjointSet:
 
     def union(self, x: int, y: int):
         """
-        Merges nodes x and y
+        Merges sets that x and y reside in
         """
         root_x = self.find(x)
         root_y = self.find(y)
@@ -30,7 +30,6 @@ class DisjointSet:
             if self.rank[root_x] == self.rank[root_y]:
                 self.rank[root_y] += 1
         
-
 class Solution:
     
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
@@ -48,7 +47,7 @@ class Solution:
                 x2 = points[j][0]
                 y2 = points[j][1]
                 weight = abs(x2 - x1) + abs(y2 - y1)
-                # since all points are distince, we use the points index in points as its unique identifier
+                # since all points are distinct, we use the points index in points as its unique identifier
                 # This is easier to work with in the disjoint set structure
                 edges.append((i, j, weight))
                 
