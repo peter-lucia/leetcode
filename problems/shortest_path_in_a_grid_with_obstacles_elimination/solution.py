@@ -21,8 +21,6 @@ class Solution:
             path = queue.pop(0)
             i, j, _k = path[-1]
             
-            visited.add((i, j, _k))
-            
             if i == n-1 and j == m-1:
                 print(*path)
                 return len(path) - 1
