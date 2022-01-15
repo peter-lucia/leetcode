@@ -5,77 +5,52 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    
-    def bottom_view_hashmap(self, root, lookup, level, path, parent, is_left, deleted_list):
+    def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
         
-        if root is None:
-            return
+        # Approach
+        # Use DFS postorder to find all the leaves
+        # Add parent to DFS call so a node can be deleted
+        # Add whether the direction is left or right so we know
+        # which child node to delete from the parent by setting it to None
+        # Wait to delete until after a full traversal
         
-        if path in lookup:
-            if level >= lookup[path][1]:
-                lookup[path] = [root.val, level]
-        else:
-            lookup[path] = [root.val, level]
+        def dfs(node: TreeNode, parent, is_left):
             
-
-        
-        if root.left is None and root.right is None:
-            deleted_list.append(root.val)
-            if is_left:
-                parent.left = None
+            result = []
+            
+            if node.left:
+                 result += dfs(node.left, node, True)
                 
-            else:
-                parent.right = None
-            del lookup[path]
-            return
+            if node.right:
+                result += dfs(node.right, node, False)
+            
+            if node.left is None and node.right is None:
+                result.append((node, parent, is_left))
+                    
+            return result
         
-        self.bottom_view_hashmap(root.left,
-                                lookup,
-                                level + 1,
-                                path + "-left",
-                                root,
-                                True,
-                                deleted_list)
-        self.bottom_view_hashmap(root.right,
-                                lookup,
-                                level + 1,
-                                path + "-right",
-                                root,
-                                False,
-                                deleted_list)
-
+        all_leaves = []
+        while root.left is not None or root.right is not None:
+            nodes_to_delete = dfs(root, None, False)
+            leaves = [node.val for (node, parent, is_left) in nodes_to_delete]  
+            all_leaves.append(leaves)
+            for (node, parent, is_left) in nodes_to_delete:
+                if parent:
+                    if is_left:
+                        parent.left = None
+                    else:
+                        parent.right = None
+        all_leaves.append([root.val])  
+                
+        return all_leaves
+                
+            
+            
+            
+            
         
-    def findLeaves(self, root: TreeNode) -> List[List[int]]:
-        """
-            Example:
-                      20                       20               20        20
-                    /    \                   /    \           /
-                  8       22               8       22       8
-                /   \    /   \              \
-              5      3  4    25               3
-                    / \
-                  10    14
-
-        - level 0 nodes: 5, 10, 14, 4, 25
-        - level 1 nodes: 3, 22
-        - level 2 nodes: 8
-        - level 3 nodes: 20
-        Output:
-        {
-            0: [5, 10, 14, 4, 25],
-            1: [3, 22],
-            2: [8],
-            3: [20]
-        }
-        """
-        lookup = collections.defaultdict(list)
-        result = []
-        while root:
-            deleted_list = []
-            self.bottom_view_hashmap(root, lookup, 0, "", root, False, deleted_list)
-            result.append(deleted_list)
-            if not lookup:
-                break
         
-        return result
+        
+        
+        
         
