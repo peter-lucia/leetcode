@@ -1,57 +1,54 @@
 class Solution:
     def shortestPath(self, grid: List[List[int]], k: int) -> int:
-        # This is modified BFS
-        # Time complexity: O(nk) since each cell could be visited up to k times
-        # Space complexity: O(nk) since the queue could potentially house all cells in the grid
-        # with every possible value of k
+        
+        # Use BFS
+        # add state (i, j, k) to queue
+        # keep track of visited states
+        # don't visit nodes with state k <= 0
+        
         n = len(grid)
         m = len(grid[0])
-        num_steps_to_bottom_edge = n - 1
-        num_steps_to_right_edge = m - 1
-        manhattan_dist = num_steps_to_bottom_edge + num_steps_to_right_edge
-        if manhattan_dist <= k:
-            return manhattan_dist
+        visited = set()
         queue = []
-        state = (0,0,k)
-        queue.append([state])
-        visited = set(state)
+        queue.append([(0, 0, k)])
+        
+        # get manhattan distance
+        # if manhattan distance <= k, return it
+        if n-1 + m-1 <= k:
+            return n-1 + m-1
+        
         while queue:
             path = queue.pop(0)
-            ii, jj, k = path[-1]
+            i, j, _k = path[-1]
             
-            if (ii, jj) == (n-1, m-1):
-                # with BFS, whichever path gets here first wins
-                print("Shortest path = ", *path)
+            visited.add((i, j, _k))
+            
+            if i == n-1 and j == m-1:
+                print(*path)
                 return len(path) - 1
             
-            # visit each neighbor
-            for (iii, jjj) in [(ii-1, jj), (ii+1, jj), (ii, jj-1), (ii, jj+1)]:
-                if iii < 0 or jjj < 0 or iii >= n or jjj >= m:
-                    continue
+            neighbors = [(i-1, j), (i+1, j), (i, j-1), (i, j+1)]
+            for (x,y) in neighbors:
+                if 0 <= x < n and 0 <= y < m:
                     
-                new_eliminations = k
-                    
-                if grid[iii][jjj] == 1:
-                    if k > 0:
-                        new_eliminations = k - 1
+                    if grid[x][y] == 1:
+                        new_k = _k - 1
+                        if new_k < 0:
+                            continue
                     else:
+                        new_k = _k
+                    
+                    if (x, y, new_k) in visited:
                         continue
                         
-                new_state = (iii, jjj, new_eliminations)
-                new_path = list(path)
+                    new_path = list(path)
                         
-                if new_state in visited:
-                    continue
-                    
-                visited.add(new_state)
-                new_path.append(new_state)
-                queue.append(new_path)
-                
-            visited.add((ii, jj, k))
-            
+                    new_path.append((x, y, new_k))
+                    visited.add((x, y, new_k))
+                    queue.append(new_path)
         return -1
-        
-        
+                    
+            
             
             
         
