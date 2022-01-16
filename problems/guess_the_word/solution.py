@@ -7,42 +7,49 @@
 
 class Solution:
     def findSecretWord(self, wordlist: List[str], master: 'Master') -> None:
-        """
-        https://leetcode.com/problems/guess-the-word/discuss/940407/O(n)-with-detailed-explanation-Python-JavaScript-GoLang 
         
-        1. Randomly pick a word from wordlist, guess it and get the number of digits, x, that are in the correct position
-        2. Find all candidate words that have at least x digits in common with the last guessed word
-        3. Shorten the wordlist to only include the candidates found in step 2. Repeat step 1 up to 10 times.
-        """
-        random.seed(100)
+        # Observations
         
-        if len(wordlist) <= 10:
-            for word in wordlist:
-                master.guess(word)
-            return
+        # If we get back a score of 0, eliminate all words that share > 0 letter positions in common with the last guessed word
+        # If we get back a score of 6, have our answer
+        # If we get back a score of 1-5, the correct word will have the same number of letter positions in common with the
+        # last guessed word as what was returned as the score.
         
-                    
-        def get_num_matches(w1: str, w2: str) -> int:
-            """
-            Gets the number of digits that are matching in the same position
-            Assumes words are of the same size
-            """
+        # Approach
+        
+        # 1. Make a function that filters the wordslist by the words that have
+        # at least x number of exact value and position matches as the input word
+        
+        # 2. Guess a random word from the wordlist
+        
+        def get_matches(word1: str, word2: str) -> bool:
+            # len(word1) == len(word2) since all words are of length 6
+            n = len(word1)  
+            
             result = 0
-            for i in range(len(w1)):
-                if w1[i] == w2[i]:
+            for i in range(n):
+                if word1[i] == word2[i]:
                     result += 1
             return result
-                    
-           
-        for i in range(10):
-            random_idx = random.randrange(len(wordlist))
-            guess_word = wordlist[random_idx]
-            score = master.guess(guess_word)
+        
+        random.seed(100)
+        
+        for _ in range(10):
+            guess = wordlist[random.randint(0, len(wordlist) - 1)]
+            score = master.guess(guess)
+            
             if score == 6:
-                return guess_word
-            candidates = []
-            for word in wordlist:
-                if score == get_num_matches(word, guess_word):
-                    candidates.append(word)
-            wordlist = candidates
+                return guess
+            
+            i = 0
+            while i < len(wordlist):
+                matches = get_matches(guess, wordlist[i])
+                if score == 0 and matches > 0:
+                    wordlist.pop(i)
+                elif 0 < score < 6 and matches != score:
+                    wordlist.pop(i)
+                else:
+                    i += 1   
+            
+                    
         
