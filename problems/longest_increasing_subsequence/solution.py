@@ -1,24 +1,21 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        
-        n = len(nums)
-        if n == 0:
+        if len(nums) == 0:
             return 0
-        """
-        Let L = the length of the longest increasing subsequence 
-        from a_1 to a_i.
-        
-        if nums[i]
-        """
-        T = [1 for _ in range(n)]
-        
-        for i in range(n):
-            xi = nums[i]
-            for j in range(i):
-                xj = nums[j]
-                if xi > xj and T[i] < T[j] + 1:
-                    T[i] = 1 + T[j]
 
+        # array containing the length of the LIS up to each element
+        dp = [1 for _ in nums]
 
-                    
-        return max(T)
+        for i in range(len(nums)):
+            # _max holds the maximum LIS up to and including nums[i]
+            _max = 0
+            for j in range(0, i):
+                # check if nums[i] is greater than each previous element,
+                # starting at the first element in the array.
+                # keep track of length of LIS up to i with _max
+                if nums[i] > nums[j]:
+                    _max = max(_max, dp[j])
+
+            # add 1 to account for nums[i]
+            dp[i] = _max + 1
+        return max(dp)
