@@ -2,51 +2,52 @@ class Solution:
     def shortestPath(self, grid: List[List[int]], k: int) -> int:
         
         # Use BFS
-        # add state (i, j, k) to queue
-        # keep track of visited states
-        # don't visit nodes with state k <= 0
-        
+        # Put positional + current k into queue: (i,j, _k)
         n = len(grid)
         m = len(grid[0])
-        visited = set()
-        queue = []
-        queue.append([(0, 0, k)])
         
-        # get manhattan distance
-        # if manhattan distance <= k, return it
+        
+        # If manhattan distance <= k, just return it
+        # since we can go through all obstacles without surpassing k
         if n-1 + m-1 <= k:
             return n-1 + m-1
         
+        visited = set()
+        queue = deque()
+        queue.append([(0,0,k)])
+        
         while queue:
-            path = queue.pop(0)
-            i, j, _k = path[-1]
+            
+            path = queue.popleft()
+            (i,j,_k) = path[-1]
             
             if i == n-1 and j == m-1:
                 print(*path)
                 return len(path) - 1
             
             neighbors = [(i-1, j), (i+1, j), (i, j-1), (i, j+1)]
-            for (x,y) in neighbors:
-                if 0 <= x < n and 0 <= y < m:
+            
+            for (ii, jj) in neighbors:
+                if not (0 <= ii < n and 0 <= jj < m):
+                    continue
                     
-                    if grid[x][y] == 1:
-                        new_k = _k - 1
-                        if new_k < 0:
-                            continue
+                    
+                if grid[ii][jj] == 1:
+                    if _k > 0:
+                        k_new = _k - 1
                     else:
-                        new_k = _k
-                    
-                    if (x, y, new_k) in visited:
                         continue
-                        
-                    new_path = list(path)
-                        
-                    new_path.append((x, y, new_k))
-                    visited.add((x, y, new_k))
-                    queue.append(new_path)
-        return -1
+                else:
+                    k_new = _k
                     
-            
-            
-            
+                if (ii, jj, k_new) in visited:
+                    continue      
+                    
+                new_pos = (ii, jj, k_new)
+                new_path = list(path)
+                visited.add(new_pos)
+                new_path.append(new_pos)       
+                queue.append(new_path)
+                
         
+        return -1
