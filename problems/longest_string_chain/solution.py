@@ -35,6 +35,8 @@ class Solution:
             lookup[word] = 1
             
             for i in range(len(word)):
+                # since a predecessor must have only 1 character difference,
+                # we find all possible substrings of the word where 1 character is excluded.
                 substr = word[:i] + word[i+1:]
                 
                 # because we care about letter order for predecessors, we don't need all permutations of the substring
