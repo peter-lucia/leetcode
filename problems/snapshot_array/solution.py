@@ -25,7 +25,7 @@ class SnapshotArray:
     def get(self, index: int, snap_id: int) -> int:
         # O(logn) - binary search
         # Get the idx of the last occurrence of the requested snap_id
-        # by getting the first index where all elements are less than snap_id + 1
+        # by getting the first index where all elements to the left are less than snap_id + 1
         # and then subracting one from that index
         idx_last_snap_id = bisect.bisect(self.snapshots[index], [snap_id + 1]) - 1
         return self.snapshots[index][idx_last_snap_id][1]
