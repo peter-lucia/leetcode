@@ -32,8 +32,7 @@ class Solution:
         return v
         
     def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
-        # Use BFS (level order traversal)
-        # Greedy approach: at each level calculate max v
+        # Use DFS
         v = 0
         max_a = root.val
         min_a = root.val
