@@ -1,25 +1,22 @@
 class Solution {
-
 public:
-    bool detectCapitalUse(std::string word) {
-        int count = 0;
-        std::string::iterator it = word.begin();
-        while (it != word.end()) {
-            if (std::isupper(*it)) {
-                count++;
+    bool detectCapitalUse(string word) {
+        int n = word.length();
+        
+        int capital_count = 0;
+        bool first_word_capital = false;
+        int i = 0;
+        for (const char &c : word) {
+            if (c == toupper(c) ) {
+                capital_count++;
+                if (i == 0) {
+                    first_word_capital = true;
+                }
             }
-            it++;
+            i++;
         }
-        if (count == word.length()) {
-            return true;
-        }
-        if (count == 1 && std::isupper(word[0])) {
-            return true;
-        }
-        if (count == 0) {
-            return true;
-        }
-        return false;
+        
+        return capital_count == 0 || capital_count == n || (first_word_capital && capital_count == 1);
+        
     }
 };
-
