@@ -6,18 +6,16 @@ class Solution:
         n = len(matrix)
         m = len(matrix[0])
         
-        # transpose
+        # rotate across top left to bottom right diagonal
         for i in range(n):
-            for j in range(i, n):
+            for j in range(i, m):
                 tmp = matrix[i][j]
                 matrix[i][j] = matrix[j][i]
                 matrix[j][i] = tmp
-        
-        # then reverse each row
+                
+        # reverse each row
         for i in range(n):
-            tmp = matrix[i]
-            tmp.reverse()
-            matrix[i] = tmp
-        return matrix
+            matrix[i].reverse()
+                
         
         
