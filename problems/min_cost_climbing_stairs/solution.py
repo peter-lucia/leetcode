@@ -1,11 +1,29 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        # dynamic programming approach
         
-        previous_sum = next_sum = 0
-        for each in reversed(cost):
-            temp_sum = next_sum
-            next_sum = each + min(previous_sum, next_sum)
-            previous_sum = temp_sum
+        n = len(cost)
+        
+        dp = [0 for _ in range(n+1)]
+        
+        # to cover 0 steps, the cost is 0
+        dp[0] = 0
+        
+        if n >= 1:
+            dp[1] = cost[0]
             
-        return min(previous_sum, next_sum)
+        for i in range(2, n+1):
+            dp[i] = min(dp[i-1] + cost[i-1],
+                       dp[i-2] + cost[i-1])
+            
+        return min(dp[n], dp[n-1])
+        
+        
+        
+        
+            
+            
+            
+        
+        
+        
+        
