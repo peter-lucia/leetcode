@@ -4,36 +4,32 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        # Approach
-        
-        # Use postorder traversal DFS
-        # For each node:
-        # Determine if the max value in the left subtree is > node.val
-        # Determine if the min value in the right subtree is < node.val
-        # If this is true for all nodes, return True, otherwise return False
-        
-        self.prev = -math.inf
-        
-        def dfs(node: TreeNode):
-            if node is None:
-                return True
-            
-            if not dfs(node.left):
-                return False
-            
-            if self.prev >= node.val:
-                return False
-            
-            self.prev = node.val
-            
-            if not dfs(node.right):
-                return False
-            
+
+        if root is None:
             return True
-        
-        return dfs(root)
-        
-        
-        
+
+        def dfs(node: TreeNode, lower_bound: int, upper_bound: int) -> bool:
+
+            if not (lower_bound < node.val < upper_bound):
+                return False
+
+            left_okay = True
+            right_okay = True
+            
+            if node.left:
+                left_okay = dfs(node.left, lower_bound, node.val)
+
+            if node.right:
+                right_okay = dfs(node.right, node.val, upper_bound)
+
+            return left_okay and right_okay
+
+        return dfs(root, -math.inf, math.inf)
+
+
+
+
+
