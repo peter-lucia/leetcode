@@ -1,19 +1,20 @@
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        
-        # Approach: add each number to a hashmap num (int) -> occurrences (int)
-        # sorted the hashmap by values
-        # return the first k keys in the sorted hashmap
-        
+        """
+        {
+            elem -> occurrences
+        }
+
+        get values
+        sort values
+        return top k
+        """
         lookup = defaultdict(int)
         for num in nums:
             lookup[num] += 1
         
-        sorted_lookup = sorted(list(lookup.items()), key=lambda val: val[1], reverse=True)
-        result = []
-        for i, (key,value) in enumerate(sorted_lookup):
-            result.append(key)
-            if i+1 == k:
-                break
-        return result
-        
+        vals = list(lookup.items())
+        vals.sort(key = lambda elem: elem[1], reverse=True)
+        vals = vals[:k]
+        return [each[0] for each in vals]
+
