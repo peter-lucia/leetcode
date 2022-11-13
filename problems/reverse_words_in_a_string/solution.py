@@ -1,8 +1,7 @@
 class Solution:
     def reverseWords(self, s: str) -> str:
-        str_clean = s.strip()
-        str_clean = re.sub(" +", " ", str_clean) # + means one or more
-        tokens = str_clean.split(" ")
-        tokens.reverse() # reverses list of strings in place.
-        return " ".join(tokens)
-        
+        s = s.strip()
+        words = s.split(" ")
+        words = [word for word in words if (word and word[0] != " ")]
+        words.reverse()
+        return " ".join(words)
