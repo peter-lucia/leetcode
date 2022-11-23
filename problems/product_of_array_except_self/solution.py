@@ -1,31 +1,36 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        
-        # nums = 1,2,3,4
-        # A = 1, 2, 6, 
-        
+        """
+        nums = [1,2,3,4,0]
+        prefix array: product of nums from left to right
+        [1,2,6,24,0]
+
+        postfix array: product of nums from right to left
+        [0,0,0,0,0]
+
+        result[i] = prefix[i-1] * postfix[i+1]
+        """
         n = len(nums)
-        # A = the array containing the cumulative product up to each i starting from the left side and moving right
-        A = []
-        prod = 1
-        for each in nums:
-            prod *= each
-            A.append(prod)
-        # B = array containing the product up to each j starting from the right side and moving left
-        B = []
-        prod = 1
-        for each in reversed(nums):
-            prod *= each
-            B.append(prod)
-        B.reverse()
-        # iterate over the array and multiply i-1 * i+1
-        result = []
-        for i in range(n):
+        prefix = 1
+        prefix_arr = [None for _ in range(n)]
+        for i, each in enumerate(nums):
+            prefix_arr[i] = prefix * each
+            prefix = prefix_arr[i]
+
+        postfix = 1
+        postfix_arr = [None for _ in range(n)]
+        for i in range(n-1, -1, -1):
+            postfix_arr[i] = postfix * nums[i]
+            postfix = postfix_arr[i]
+
+        result = [None for _ in range(n)]
+        for i in range(n): 
             if i == 0:
-                result.append(B[1])
-            elif i == n-1:
-                result.append(A[n-2])
+                result[i] = postfix_arr[i+1]
+            elif i == n - 1:
+                result[i] = prefix_arr[i-1]
             else:
-                result.append(A[i-1]*B[i+1])
-            
-        return result            
+                result[i] = prefix_arr[i-1] * postfix_arr[i+1]
+        return result
+
+
