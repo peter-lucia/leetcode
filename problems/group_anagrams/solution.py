@@ -4,7 +4,10 @@ class Solution:
         #     letters sorted -> words
         # }
         lookup = defaultdict(list)
-        for s in strs:
-            lookup["".join(sorted(s))].append(s)
-    
-        return lookup.values()
+        for word in strs:
+            word_sorted = "".join(sorted(word))
+            lookup[word_sorted].append(word)
+        
+        return [v for k, v in lookup.items()]
+
+
