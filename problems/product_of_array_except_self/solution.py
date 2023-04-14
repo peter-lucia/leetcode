@@ -1,36 +1,34 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        """
-        nums = [1,2,3,4,0]
-        prefix array: product of nums from left to right
-        [1,2,6,24,0]
 
-        postfix array: product of nums from right to left
-        [0,0,0,0,0]
+        if len(nums) == 1:
+            return 0
 
-        result[i] = prefix[i-1] * postfix[i+1]
-        """
+        if len(nums) == 2:
+            return nums[::-1]
         n = len(nums)
-        prefix = 1
-        prefix_arr = [None for _ in range(n)]
-        for i, each in enumerate(nums):
-            prefix_arr[i] = prefix * each
-            prefix = prefix_arr[i]
 
-        postfix = 1
-        postfix_arr = [None for _ in range(n)]
-        for i in range(n-1, -1, -1):
-            postfix_arr[i] = postfix * nums[i]
-            postfix = postfix_arr[i]
+        left_to_right = [None for _ in range(n)]
+        left_to_right[0] = nums[0]
+        for idx, num in enumerate(nums):
+            if idx == 0:
+                continue
+            left_to_right[idx] = left_to_right[idx-1]*num
 
-        result = [None for _ in range(n)]
-        for i in range(n): 
-            if i == 0:
-                result[i] = postfix_arr[i+1]
-            elif i == n - 1:
-                result[i] = prefix_arr[i-1]
-            else:
-                result[i] = prefix_arr[i-1] * postfix_arr[i+1]
+        right_to_left = [None for _ in range(n)]
+        right_to_left[0] = nums[-1]
+        for idx, num in enumerate(nums[::-1]):
+            if idx == 0:
+                continue
+            right_to_left[idx] = right_to_left[idx-1]*num
+        right_to_left.reverse()
+
+        result = [None for i in range(len(nums))]
+        result[0] = right_to_left[1]
+        result[-1] = left_to_right[-2]
+        for i in range(len(nums)):
+            if i == 0 or i == (len(nums) - 1):
+                continue
+            result[i] = left_to_right[i-1]*right_to_left[i+1]
         return result
-
 
