@@ -1,38 +1,34 @@
 class MinStack:
 
     def __init__(self):
-        """
-        initialize your data structure here.
-        """
-        self.stack = deque()
-        self.stack_position = 0
+        self.stack = []
+        self.min_stack = []
         
 
-    def push(self, x: int) -> None:
-        if not self.stack:
-            self.stack.append((x, x))
-            return
-        current_min = self.stack[-1][1]
-        self.stack.append((x, min(current_min, x)))
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if not self.min_stack or val <= self.min_stack[-1]:
+            self.min_stack.append(val)
         
     def pop(self) -> None:
-        self.stack.pop()
-        
-
+        if self.stack:
+            val = self.stack.pop(-1)
+            if val == self.min_stack[-1]:
+                self.min_stack.pop(-1)
+            
     def top(self) -> int:
-        return self.stack[-1][0]
-
-
+        if self.stack:
+            return self.stack[-1]
         
     def getMin(self) -> int:
-        return self.stack[-1][1]
-        
+        if self.min_stack:
+            return self.min_stack[-1]
         
 
 
 # Your MinStack object will be instantiated and called as such:
 # obj = MinStack()
-# obj.push(x)
+# obj.push(val)
 # obj.pop()
 # param_3 = obj.top()
 # param_4 = obj.getMin()
