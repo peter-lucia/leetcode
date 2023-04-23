@@ -1,19 +1,11 @@
 class Solution:
-    
-    def getMaxProfit(self, prices: List[int]) -> (int, int, int):
-        if len(prices) == 1:
-            return 0, prices[0], prices[0]
-        n = len(prices)
-        
-        pA, minA, maxA = self.getMaxProfit(prices[:n//2])
-        pB, minB, maxB = self.getMaxProfit(prices[(n//2):])
-        
-        return max(pA, pB, maxB - minA), min(minA, minB), max(maxA, maxB)
-    
     def maxProfit(self, prices: List[int]) -> int:
-        if len(prices) == 0:
-            return 0
-        return self.getMaxProfit(prices)[0]
-
-        
-        
+        max_gain = 0
+        if len(prices) <= 1:
+            return max_gain
+        min_price = prices[0]
+        for i in range(1, len(prices)):
+            gain = prices[i] - min_price
+            min_price = min(min_price, prices[i])
+            max_gain = max(max_gain, gain)
+        return max_gain
