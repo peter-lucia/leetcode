@@ -19,6 +19,8 @@ class Solution:
             else:
                 return [i+1,j+1]
 
+        return [-1, -1]
+
 
 
         
