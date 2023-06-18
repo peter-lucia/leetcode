@@ -1,34 +1,27 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
+      # get cum product left to right
+      # get cum profuct right to left
+      # for each i, mult arr[i-1]*arr[i+1]
+      a = nums
+      n = len(a)
+      s = 1
+      lr = []
+      for i in range(n):
+        s *= a[i]
+        lr.append(s)
 
-        if len(nums) == 1:
-            return 0
+      s = 1
+      rl = []
+      for i in range(n-1,-1,-1):
+        s*=a[i]
+        rl.append(s)
+      rl.reverse()
 
-        if len(nums) == 2:
-            return nums[::-1]
-        n = len(nums)
+      return [rl[1]]+[
+        lr[i-1]*rl[i+1]
+        for i in range(1,n-1)
+      ]+[lr[-2]]
 
-        left_to_right = [None for _ in range(n)]
-        left_to_right[0] = nums[0]
-        for idx, num in enumerate(nums):
-            if idx == 0:
-                continue
-            left_to_right[idx] = left_to_right[idx-1]*num
 
-        right_to_left = [None for _ in range(n)]
-        right_to_left[0] = nums[-1]
-        for idx, num in enumerate(nums[::-1]):
-            if idx == 0:
-                continue
-            right_to_left[idx] = right_to_left[idx-1]*num
-        right_to_left.reverse()
-
-        result = [None for i in range(len(nums))]
-        result[0] = right_to_left[1]
-        result[-1] = left_to_right[-2]
-        for i in range(len(nums)):
-            if i == 0 or i == (len(nums) - 1):
-                continue
-            result[i] = left_to_right[i-1]*right_to_left[i+1]
-        return result
-
+        
