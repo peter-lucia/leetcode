@@ -1,21 +1,28 @@
 class Solution:
-    def getArea(self, left, left_pos, right, right_pos):
-        h = min(left, right)
-        dist = abs(right_pos - left_pos)
-        return h*dist
-    
     def maxArea(self, height: List[int]) -> int:
-        
-        left = 0
-        right = len(height) - 1
-        
-        max_area = 0
-        
-        while left != right:
-            
-            max_area = max(max_area, self.getArea(height[left], left, height[right], right))
-            if height[left] < height[right]:
-                left += 1
-            else:
-                right -= 1
-        return max_area
+      # track max area int
+      # left and right pointers, i, j
+      # if hs[i] < hs[j], i +=1
+      # otherwise, j-= 1
+      # at each step calc max area
+
+      i = 0
+      hs = height
+      j = len(hs)-1
+      ma = 0
+      while i < j:
+        a = min(
+          hs[i],
+          hs[j]
+        ) * (j-i)
+        ma = max(
+          ma,
+          a
+        )
+        if hs[i] < hs[j]:
+          i += 1
+        else:
+          j -= 1
+      return ma
+
+          
