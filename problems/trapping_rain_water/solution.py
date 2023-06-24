@@ -1,34 +1,28 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        if height == []:
-            return 0
-        left = 0
-        right = len(height) - 1
-        
-        total = 0
-        left_max = 0
-        right_max = 0
-        while left != right:
-            # check if left block is less than right block
-            if height[left] < height[right]:
-                
-                if height[left] >= left_max:
-                    left_max = height[left]
-                else:
-                    # if left block 
-                    total += left_max - height[left]
-                
-                left += 1
+      # get two list
+      # a[i]= max height left of i
+      # b[i]= max height right of i
+      # c[i]= min(a[i],b[i])-h[i]
+      # return sum of c
+      h=height.copy()
+      mx=0
+      a=[0]
+      for i in range(1,len(h)):
+        mx=max(mx,a[i-1],h[i-1])
+        a.append(mx)
+      mx = 0
+      b =[0 for _ in range(len(h))]
+      for j in range(len(h)-2,-1,-1):
+        mx=max(mx,b[j+1],h[j+1])
+        b[j]=mx
+      c=[]
+      for i in range(len(h)):
+        c.append(max(
+          min(a[i],b[i])-h[i],
+          0
+        ))
+      return sum(c)
 
-            else:
-                if height[right] >= right_max:
-                    right_max = height[right]
-                else:
-                
-                    total += right_max - height[right]
-                right -= 1
-        return total
-            
-            
-            
-            
+
+        
