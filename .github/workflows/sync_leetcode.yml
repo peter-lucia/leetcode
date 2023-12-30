@@ -19,5 +19,4 @@ jobs:
         github-token: ${{ github.token }}
         leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
         leetcode-session: ${{ secrets.LEETCODE_SESSION }}
-        filter-duplicate-secs: 315400000 # ignore submissions older than 10 years
         verbose: true
