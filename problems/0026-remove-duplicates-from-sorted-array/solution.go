@@ -1,20 +1,26 @@
 func removeDuplicates(nums []int) int {
-    // assuming values are sorted:
-    // keep track of last unique value index and current index
-    // as soon as the value at the new current index does not equal the value at the
-    // last unique value index, increment the last unique value index and
-    // assign the newest unique value to that index
-
-    i := 0
-    j := 1
-
-    for i < j && j < len(nums) {
-        if nums[i] != nums[j] {
-            i++
-            nums[i] = nums[j]
-        }
-        j++
+    // track last unique index
+    // track current index
+    // if current does not equal last unique,
+    // increment last unique index and set current value to the new position
+    // otherwise  increment current
+    // O(n) time complexity
+    // O(1) space complexity
+    if len(nums) <= 1 {
+        return len(nums)
     }
-    return i+1
+    idxLastUnique := 0
+    idxCurr := 1
 
+    for ;idxCurr < len(nums); {
+        if nums[idxLastUnique] == nums[idxCurr] {
+            idxCurr++
+        } else {
+            idxLastUnique++;
+            nums[idxLastUnique] = nums[idxCurr] 
+            idxCurr++
+        }
+    }
+
+    return idxLastUnique+1
 }
